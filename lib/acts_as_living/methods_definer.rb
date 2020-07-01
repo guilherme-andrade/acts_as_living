@@ -6,8 +6,8 @@ module ActsAsLiving::MethodsDefiner
       extend ClassMethods
       include InstanceMethods
 
-      @periods.each(&method(:define_period_queries))
       @stage_keys.each(&method(:define_stage_queries))
+      @periods.each(&method(:define_period_queries))
     end
   end
 
@@ -48,20 +48,20 @@ module ActsAsLiving::MethodsDefiner
       stage_before(stage)
     end
 
-    def final_stage?
-      self.class.final_stage?(stage)
+    def dying?
+      self.class.dying?(stage)
     end
 
-    def initial_stage?
-      self.class.initial_stage?(stage)
+    def newborn?
+      self.class.newborn?(stage)
     end
 
-    def dead_stage?
-      self.class.dead_stage == stage
+    def dead?
+      self.class.death == stage
     end
 
-    def dead_or_finalized?
-      dead_stage? || final_stage?
+    def dead_or_dying?
+      dead? || dying?
     end
 
     def klass_periods_with_ranges
@@ -109,27 +109,27 @@ module ActsAsLiving::MethodsDefiner
     end
 
     def stages_after(stage)
-      return [] if final_stage?(stage)
+      return [] if dying?(stage)
 
       stages[stage_after(stage)..]
     end
 
     def stages_before(stage)
-      return [] if initial_stage?(stage)
+      return [] if newborn?(stage)
 
       index = stage_keys.find_index(stage)
       stage_keys[0...index]
     end
 
     def stage_after(stage)
-      return if final_stage?(stage)
+      return if dying?(stage)
 
       index = stage_keys.find_index(stage)
       stage_keys[index + 1]
     end
 
     def stage_before(stage)
-      return if initial_stage?(stage)
+      return if newborn?(stage)
 
       index = stage_keys.find_index(stage)
       stage_keys[index - 1]
@@ -139,19 +139,19 @@ module ActsAsLiving::MethodsDefiner
       stage_keys.last
     end
 
-    def final_stage?(stage)
+    def dying?(stage)
       final_stage == stage
     end
 
-    def initial_stage
+    def newborn_stage
       stages.key(0)
     end
 
-    def dead_stage
+    def death
       @death
     end
 
-    def initial_stage?(stage)
+    def newborn?(stage)
       initial_stage == stage
     end
 

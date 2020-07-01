@@ -12,12 +12,12 @@ module ActsAsLiving::ValidationsDefiner
 
   module InstanceMethods
     def stage_progression
-      return if stage.to_s == self.class.dead_stage.to_s || stage == stage_after(stage_was)
+      return if stage.to_s == self.class.death.to_s || stage == stage_after(stage_was)
 
       message = if stage_was == self.class.final_stage
-                  "The contract can only be updated to '#{self.class.dead_stage}'"
+                  "The contract can only be updated to '#{self.class.death}'"
                 else
-                  "The contract can only be updated to '#{self.class.dead_stage}' or '#{stage_after(stage_was)}'"
+                  "The contract can only be updated to '#{self.class.death}' or '#{stage_after(stage_was)}'"
                 end
 
       errors.add(:stage, message)

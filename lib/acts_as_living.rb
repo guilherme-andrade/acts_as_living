@@ -11,6 +11,10 @@ require 'acts_as_living/validations_definer'
 
 module ActsAsLiving
   extend ActiveSupport::Autoload
+
+  rake_tasks do
+    load 'tasks/acts_as_living.rake'
+  end
 end
 
 require 'acts_as_living/railtie' if defined?(Rails)

@@ -1,18 +1,18 @@
 
 module ActsAsLiving::ActsAsLiving
-  def acts_as_living(keys, **options)
-    @stage_keys = keys
-    @periods = options.dig(:periods)
-    @locked_stages = options.dig(:lock_on)
-    @death = options.dig(:death)
-    @spread = options.dig(:spread)
-    @column = options.dig(:column)
+  def acts_as_living(keys, periods:, lock_on:, death:, spread:, column:)
+    @stage_keys     = keys
+    @periods        = periods
+    @locked_stages  = lock_on
+    @death          = death
+    @spread         = spread
+    @column         = column
 
     run_definers
   end
 
   def run_definers
-    ActsAsLiving::MethodsDefinder.call(self)
+    ActsAsLiving::MethodsDefiner.call(self)
     ActsAsLiving::EnumDefiner.call(self)
     ActsAsLiving::ScopesDefiner.call(self)
     ActsAsLiving::ValidationsDefiner.call(self)
