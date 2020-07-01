@@ -11,12 +11,12 @@ module ActsAsLiving::EnumDefiner
 
   module ClassMethods
     def enum_options
-      statuses = @status_keys.map.with_index(&method(:to_enum_map)).to_h
-      statuses.merge(@death => @spread * -1)
+      stages = @stage_keys.map.with_index(&method(:to_enum_map)).to_h
+      stages.merge(@death => @spread * -1)
     end
 
-    def to_enum_map(status, index)
-      [status, index * @spread]
+    def to_enum_map(stage, index)
+      [stage, index * @spread]
     end
   end
 end

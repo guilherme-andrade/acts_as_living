@@ -1,20 +1,20 @@
 module ActsAsLiving::ScopesDefiner
   def self.call(klass)
     klass.class_eval do
-      statuses.each do |status, _num|
-        scope "past_#{status}", -> { where('status >= ?', statuses[status]) }
-        scope "pre_#{status}", -> { where('status < ?', statuses[status]) }
-        scope "not_#{status}", -> { where.not(status: status) }
+      stages.each do |stage, _num|
+        scope "past_#{stage}", -> { where('stage >= ?', stages[stage]) }
+        scope "pre_#{stage}", -> { where('stage < ?', stages[stage]) }
+        scope "not_#{stage}", -> { where.not(stage: stage) }
       end
 
-      scope :cancelled, -> { where('status < 0') }
+      scope :cancelled, -> { where('stage < 0') }
 
-      @life_stages.each do |stage, delimiters|
+      @periods.each do |period, delimiters|
         if delimiters.length == 1
-          scope stage, -> { where(status: delimiters.first) }
+          scope period, -> { where(stage: delimiters.first) }
         else
-          scope stage, lambda {
-            where('status >= ? AND status <= ?', statuses[delimiters.first], statuses[delimiters.second])
+          scope period, lambda {
+            where('stage >= ? AND stage <= ?', stages[delimiters.first], stages[delimiters.second])
           }
         end
       end

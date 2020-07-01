@@ -7,10 +7,10 @@
 #                           ->(_target, result) { result == false }
 #                         end
 
-#   # defines before, after and around callbaks for each stage of the acts_as_living
+#   # defines before, after and around callbaks for each period of the acts_as_living
 #   #   e.g. before_cancelled { do_something }
 #   #   e.g. after_activated :run_method
-#   #   e.g. after_status_change :run_method
+#   #   e.g. after_stage_change :run_method
 
 #   def self.call(klass)
 #     klass.class_eval do
@@ -18,78 +18,78 @@
 #       extend ClassMethods
 #       include InstanceMethods
 
-#       callbacks_for(:status_change)
-#       callbacks_for(:life_stage_change)
-#       status_keys.each(&method(:status_callbacks_for))
-#       @life_stages.keys.each(&method(:lifestage_callbacks_for))
+#       callbacks_for(:stage_change)
+#       callbacks_for(:period_change)
+#       stage_keys.each(&method(:stage_callbacks_for))
+#       @periods.keys.each(&method(:lifeperiod_callbacks_for))
 #     end
 #   end
 
 #   module InstanceMethods
 #     def save(*args)
-#       return super(*args) unless valid? && status_changed? ||  valid? && new_record?
+#       return super(*args) unless valid? && stage_changed? ||  valid? && new_record?
 
-#       _run_status_change_callbacks do
-#         run_callbacks("status_change_to_#{status}") do
+#       _run_stage_change_callbacks do
+#         run_callbacks("stage_change_to_#{stage}") do
 #           binding.pry if notice_of_termination_received?
-#           life_stage_changed? ? run_life_stage_callbacks { binding.pry; 'hey'; super(*args) } : super(*args)
+#           period_changed? ? run_period_callbacks { binding.pry; 'hey'; super(*args) } : super(*args)
 #         end
 #       end
 #     end
 
 #     def save!(*args)
-#       return super(*args) unless valid? && status_changed? ||  valid? && new_record?
+#       return super(*args) unless valid? && stage_changed? ||  valid? && new_record?
 
-#       _run_status_change_callbacks do
-#         run_callbacks("status_change_to_#{status}") do
-#           life_stage_changed? ? run_life_stage_callbacks { binding.pry; 'hey'; super(*args) } : super(*args)
+#       _run_stage_change_callbacks do
+#         run_callbacks("stage_change_to_#{stage}") do
+#           period_changed? ? run_period_callbacks { binding.pry; 'hey'; super(*args) } : super(*args)
 #         end
 #       end
 #     end
 
 #     protected
 
-#     def run_life_stage_callbacks(&block)
-#       _run_life_stage_change_callbacks do
-#         _run_life_stage_started_callbacks do
-#           _run_life_stage_ended_callbacks(&block)
+#     def run_period_callbacks(&block)
+#       _run_period_change_callbacks do
+#         _run_period_started_callbacks do
+#           _run_period_ended_callbacks(&block)
 #         end
 #       end
 #     end
 
-#     def _run_life_stage_started_callbacks(&block)
-#       life_stages_started.inject(block) do |blk, stage|
-#         _run_stage_started_callbacks(stage, &blk)
+#     def _run_period_started_callbacks(&block)
+#       periods_started.inject(block) do |blk, period|
+#         _run_period_started_callbacks(period, &blk)
 #       end
 #     end
 
-#     def _run_life_stage_ended_callbacks(&block)
-#       life_stages_ended.inject(block) do |blk, stage|
-#         _run_stage_ended_callbacks(stage, &blk)
+#     def _run_period_ended_callbacks(&block)
+#       periods_ended.inject(block) do |blk, period|
+#         _run_period_ended_callbacks(period, &blk)
 #       end
 #     end
 
-#     def _run_stage_started_callbacks(stage, &block)
-#       run_callbacks("#{stage}_started".to_sym, &block)
+#     def _run_period_started_callbacks(period, &block)
+#       run_callbacks("#{period}_started".to_sym, &block)
 #     end
 
-#     def _run_stage_ended_callbacks(stage, &block)
-#       run_callbacks("#{stage}_ended".to_sym, &block)
+#     def _run_period_ended_callbacks(period, &block)
+#       run_callbacks("#{period}_ended".to_sym, &block)
 #     end
 #   end
 
 #   module ClassMethods
-#     def lifestage_callbacks_for(stage)
-#       define_callback_methods_for("#{stage}_started".to_sym)
-#       define_callback_methods_for("#{stage}_ended".to_sym)
+#     def lifeperiod_callbacks_for(period)
+#       define_callback_methods_for("#{period}_started".to_sym)
+#       define_callback_methods_for("#{period}_ended".to_sym)
 #     end
 
 #     def callbacks_for(callback_name)
 #       define_callback_methods_for(callback_name)
 #     end
 
-#     def status_callbacks_for(status_name)
-#       define_callback_methods_for("status_change_to_#{status_name}")
+#     def stage_callbacks_for(stage_name)
+#       define_callback_methods_for("stage_change_to_#{stage_name}")
 #     end
 
 #     def _normalize_callback_options(options)

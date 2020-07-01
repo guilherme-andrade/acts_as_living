@@ -3,30 +3,30 @@ module ActsAsLiving::ValidationsDefiner
     klass.class_eval do
       include InstanceMethods
 
-      validates :status, presence: true
+      validates :stage, presence: true
 
-      validate :status_progression, on: :update, if: :status_changed?
-      validate :initialized_status, on: :create, if: :status_changed?
+      validate :stage_progression, on: :update, if: :stage_changed?
+      validate :initialized_stage, on: :create, if: :stage_changed?
     end
   end
 
   module InstanceMethods
-    def status_progression
-      return if status.to_s == self.class.dead_status.to_s || status == status_after(status_was)
+    def stage_progression
+      return if stage.to_s == self.class.dead_stage.to_s || stage == stage_after(stage_was)
 
-      message = if status_was == self.class.final_status
-                  "The contract can only be updated to '#{self.class.dead_status}'"
+      message = if stage_was == self.class.final_stage
+                  "The contract can only be updated to '#{self.class.dead_stage}'"
                 else
-                  "The contract can only be updated to '#{self.class.dead_status}' or '#{status_after(status_was)}'"
+                  "The contract can only be updated to '#{self.class.dead_stage}' or '#{stage_after(stage_was)}'"
                 end
 
-      errors.add(:status, message)
+      errors.add(:stage, message)
     end
 
-    def initialized_status
-      return if status == self.class.initial_status
+    def initialized_stage
+      return if stage == self.class.initial_stage
 
-      errors.add(:status, "Contract has to be initialized with '#{self.class.initial_status}' status")
+      errors.add(:stage, "Contract has to be initialized with '#{self.class.initial_stage}' stage")
     end
   end
 end

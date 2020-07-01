@@ -4,20 +4,20 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'acts_as_living/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'activerecord-acts_as_living'
+  spec.name          = 'acts_as_living'
   spec.version       = ActsAsLiving::VERSION
   spec.authors       = ['Guilherme Andrade']
   spec.email         = ['guilherme.andrade.ao@gmail.com']
 
-  spec.summary       = 'An ActiveRecord plugin that assists in acts_as_living status progressions.'
-  spec.description   = 'An ActiveRecord plugin that assists in acts_as_living status progressions.'
-  spec.homepage      = 'https://github.com/guilherme-andrade/activerecord-acts_as_living'
+  spec.summary       = 'An ActiveRecord plugin that assists in acts_as_living stage progressions.'
+  spec.description   = 'An ActiveRecord plugin that assists in acts_as_living stage progressions.'
+  spec.homepage      = 'https://github.com/guilherme-andrade/acts_as_living'
   spec.license       = 'MIT'
 
   if spec.respond_to?(:metadata)
     spec.metadata['homepage_uri'] = spec.homepage
-    spec.metadata['source_code_uri'] = 'https://github.com/guilherme-andrade/activerecord-acts_as_living'
-    spec.metadata['changelog_uri'] = 'https://github.com/guilherme-andrade/activerecord-acts_as_living/blob/master/Changelog.md'
+    spec.metadata['source_code_uri'] = 'https://github.com/guilherme-andrade/acts_as_living'
+    spec.metadata['changelog_uri'] = 'https://github.com/guilherme-andrade/acts_as_living/blob/master/Changelog.md'
   else
     raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
   end
