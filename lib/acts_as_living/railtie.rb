@@ -7,8 +7,12 @@ module ActsAsLiving
   class Railtie < Rails::Railtie
     config.to_prepare do
       ActiveSupport.on_load(:active_record) do
-        extend ActsAsLiving::ClassMethods
+        include ActsAsLiving::ActsAsLiving
       end
+    end
+
+    rake_tasks do
+      load 'tasks/acts_as_living.rake'
     end
   end
 end
